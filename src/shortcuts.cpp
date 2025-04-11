@@ -30,7 +30,7 @@ const std::map<string, vector<string>> shortcut_commands = {
   {"select", {"all", "context"}},
   {"move_x", {"left", "right", "leftmost", "rightmost", "word_left", "word_right"}},
   {"move_y", {"down", "up", "top", "bottom"}},
-  {"delete", {"left", "right", "line", "word_left", "word_right", "line_before", "line_after"}},
+  {"delete", {"left", "right", "line", "word_left", "word_right", "all_left", "all_right"}},
   {"selection", {"stash", "pop"}},
   {"command", {"stash", "pop", "clear"}},
   {"copy", {}},
@@ -313,11 +313,11 @@ std::shared_ptr<CommandToEvaluate> ShortcutAction::run_command(ConsoleCommand *p
     } else if(cmd_value == "line"){
       pconcom->delete_current_line();
       
-    } else if(cmd_value == "line_before"){
-      pconcom->delete_line_before();
+    } else if(cmd_value == "all_left"){
+      pconcom->delete_all_left();
       
-    } else if(cmd_value == "line_after"){
-      pconcom->delete_line_after();
+    } else if(cmd_value == "all_right"){
+      pconcom->delete_all_right();
       
     } else {
       util::error_msg("Internal error: ShortcutAction: for command ", str::dquote(cmd_name), 

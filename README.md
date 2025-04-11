@@ -1,7 +1,7 @@
 
 # sircon: Simple R Console
 
-This is a dependency-free, Windows-only, R console. It possesses most of the features we expect from a console, in particular: history navigation, autocomplete, syntax highlighting, etc. It can be very easily customized, directly from within the console.
+This is a dependency-free, Windows-only, R console. It possesses most of the features we expect from a console, in particular: context-aware history navigation, (beefy) autocomplete, syntax highlighting, multi-lines editing, etc. It can be very easily customized, directly from within the console. It provides a macro language to empower the user with powerful custom shortcuts.
 
 ## Getting started
 
@@ -72,6 +72,8 @@ The autocmplete provides suggestions for the following contexts:
 The history is project specific. To find the location of the history, type `%path_history` (this is a special command, see the dedicated section). Just press up/down to navigate the history.
 
 Start a command with `@` to navigate the history with the help of the autocomplete. Pressing `@` then TAB gives you the list of all previous entries. Simply start typing to refine the search.
+
+Several histories co-exist, but live in different houses. For example, when you run `browser()` from within a function, sircon creates an history specific to this function. Hence the commands from within this function will not mess your main history for the main commands. And when you return to the function that has been `browser()`'ed, you recover its previous history.
 
 ## Options
 
@@ -148,11 +150,123 @@ The special commands are:
 
 ## Shortcuts
 
+sircon's has a built-in macro language to create any kind of shortcut you want. Note that a few important shortcuts cannot be customized, they are detailed last.
+
+### Creating shortcuts: Macro language principle
+
+In its simplest form, a shortcut just inserts a piece of text. Let's create a shortcut that inserts "hello!":
+
+```raw
+%options.shortcut.ctrl+d.set hello!
+```
+
+Now if you press `ctrl+d`, `hello!` is inserted at the cursor position. To add spaces at the edges of the text, you need to use quotes: `%options.shortcut.ctrl+d.set "hello! "` would insert a space after `hello!`.
+
+Shortcuts can contain commands, which control the console. A shortcut command is of the form `<command_name>` or `<command_name: value>`. For example, change `ctrl+d` with:
+
+```raw
+%options.shortcut.ctrl+d.set <move_x: rightmost> hello!
+```
+
+Now when we press `ctrl+d`, the cursors goes at the right of the current line, then inserts `hello!`. 
+
+Shortcuts can contain any number of commands: these are applied in turn, left to right.
+
+### Macro language: Commands reference
+
+Here is the list of available commands (note that the autocomplete will show them to you):
+
+- `clear_screen`: clears the screen
+- `command: {stash, pop, clear}`: `stash` to stash the curent command, `pop` to pop it, and `clear` to clear it.
+- `copy`: copies the current selection.
+- `cut`: cuts the current selection.
+- `debug`: only used internally -- do not use.
+- `delete: {left, right, word_left, word_right, all_left, all_right}`: it deletes: one character `left`, or `right`; the current `line`; a word left (`word_left`) or right (`word_right`); everything left of the cursor (`all_left`) or ight of the cursor (`all_right`).
+- `enter`: presses enter.
+- `insert: ""`: inserts a verbatim the text in quotes.
+- `move_x: {left, right, word_left, word_right, leftmost, rightmost}`: move the cursor, left, right, a word left, a word right, leftmost or rightmost.
+- `move_y: {down, up, top, bottom}`: move the cursor up or down. Note that is the cursor is at the top and you move up, this will trigger history navigation. When moving with `top` or `bottom`, there is no history navigation.
+- `newline`: inserts a new line at the cursor position. That means that the content right of the cursor will be in the line down.
+- `paste`: pastes the content of the clipboard at the cursor's location.
+- `redo`: redo the last undone change
+- `run: ""`: runs the command in quotes, then gets back to the current command. The command that is run is displayed.
+- `run_no_echo: ""`: runs the command in quotes, then gets back to the current command. The command that is run *is* **not** *displayed*.
+- `select: {all, context}`: selects all the content of the current line (`all`), or the cursor's context (`context`).
+- `selection: {stash, pop}`: deletes and statshes the current selection, or pops the selection that has been stashed.
+- `undo`: undo the last change.
+
+### Macro language: Conditions
+
+You can apply shortcuts conditionnally thanks to if/else clauses. 
+
+The syntax is:
+```raw
+<if: CONDITION> <command_sequence> <else> <command_sequence> <endif>
+```
+
+You must end an `<if>` with an `<enfif>`. There are three valid logical operators in conditions: `not`, `and` and `or`. Here is the list of all conditions:
+
+- `any_selection`: true if some text is selected.
+
+- `empty`: true if there is not a single character in the command.
+
+- `is_letter_left`: true if the next character left of the cursor is a letter (spaces are ignored). Note that `'_'` and `'.'` in R are considered as letters.
+
+- `is_letter_right`: true if the next character right of the cursor is a letter (spaces are ignored). Note that `'_'` and `'.'` in R are considered as letters.
+
+- `is_punct_left`: true if the next character left of the cursor is a punctuation (spaces are ignored). Note that `'_'` and `'.'` in R are considered as letters.
+
+- `is_punct_right`: true if the next character left of the cursor is a punctuation (spaces are ignored). Note that `'_'` and `'.'` in R are considered as letters.
+
+- `line_empty`: true if the current line, in a multiline statement, is empty. If in a single line statement, this condition is the same as `empty`.
+
+- `line_matches: ""`: true if the pattern in quotes is found in the current line. Note that this is an exact match and no regular expression can be used (so far). You can use the special value `_cursor_` to represent the cursor. For example, `line_matches: {_cursor_}` is true for the current line `f = function(){|}`, but false for `f| = function(){}` because the cursor is not at the location of the pattern.
+
+- `one_liner`: true if the command is a one liner, i.e. not a multi-lines command.
+
+- `x_leftmost`: true if the cursor is leftmost of the current line.
+
+- `x_rightmost`: true if the cursor is rightmost of the current line.
+
+- `y_bottom`: true if the cursor is at the bottom of the command (for multilines statements).
+
+- `y_top`: true if the cursor is at the top of the command (for multilines statements).
 
 
-By default, sircon offers the following shortcuts:
-- ctrl+a: selects the current 
+Please see the two last examples of the default shortcuts for complex examples using conditions.
 
+### Default shortcuts
+
+By default, sircon implements the following shortcuts:
+
+- `ctrl+a = <select: context>`: it selects the context around the cursor. Ex: `greeting("john| and mary", "wha'ts up?")` (cursor in on `john`), press `ctrl+a` first selects `john and mary`, pressing again selects `"john| and mary", "wha'ts up?"`, pressing again selects the full line. Further `ctrl+a` presses cycle across those selections. To always select the full line, set `ctrl+a` to `<select: all>` instead.
+
+- `ctrl+c = <copy>`
+
+- `ctrl+d = <delete: line>`: deletes the line and goes up.
+
+- `ctrl+l = <clear_screen>`
+
+- `ctrl+n = <newline>`
+
+- `ctrl+v = <paste>`
+
+- `ctrl+x = <cut>`
+
+- `ctrl+y = <redo>`
+
+- `ctrl+z = <undo>`
+
+- `enter = <if: line_matches: "{_cursor_}"> <newline> <newline> <delete: all_left> <move_y: up> <move_x: rightmost> <endif>`: Ex: `f = function(){|}` then ENTER formats the code as line 1: `f = function(){`, line 2: `  |` (cursor is here), line 3: `}`.
+
+- `alt+enter = <if: empty> <move_y: up> <endif> <move_y: bottom> <move_x: rightmost> <insert: " |>"> <newline>`: if there's something in the line, it inserts ` |>` at the end of the line and inserts a new line. If the line is empty, it first catches the previous entry in the history, goes at the bottom line (if it's a multi-lines statement), adds ` |>` to it, and finally inserts a new line.
+
+### Shortcuts that cannot be customized
+
+On top of the previous shortcuts, there are the cursor mobility shortcuts which, so far, cannot be customized.
+
+- `shift+up` / `shift+down`: goes to the top/bottom of a multilines statement, **beware: it does not select across lines!**
+- `ctrl+alt+left` / `ctrl+alt+right`: goes to the inside of the next parenthesis/bracket.
 
 ## Limitations 
 

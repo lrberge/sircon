@@ -429,8 +429,8 @@ private:
   void move_y(int, bool);
   void add_char(const string&, bool is_sequence = false);
   void add_line();
-  void delete_line_before();
-  void delete_line_after();
+  void delete_all_left();
+  void delete_all_right();
   void delete_current_line();
   void join_lines(int side);
   void flush_cmd(bool save = true, bool is_tmp = false);

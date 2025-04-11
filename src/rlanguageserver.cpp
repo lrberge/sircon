@@ -4,55 +4,6 @@
  //              MIT License (see project_root/LICENSE)                     //
 //=========================================================================//
 
-/*
-* - [ ] automalically find the locations of R
-* - [ ] check the DLL and the R version match
-* - [ ] add a proper CmdParsed, with indent
-* - [ ] run: avoid long jump
-* - [ ] run: disable custom error handlers
-* - [ ] catch the errors when running
-* - [ ] implement autocomplete
-* - [ ] on exit: offer different implementations
-* - [ ] add options
-* - [ ] add the timing between two runs (it should be here and not in console ???? or not?)
-* - [ ] add when running for more than 1s:
-*       running... elapsed 00:00s
-*       Emit sound when over? Type bip
-* => the color of the bip letters highlight when the user writes bip
-* - [ ] autocompletes gets out only when we change the type of completion
-*       base$peta| => suggest Petal.Length
-*       base$p| => still suggest while deleting
-*       base$| => still same suggests
-*       base| => now we stop because we change the type of completion
-*       => we should also stop when adding non-word non-space characters
-*       
-* - [ ] allow less spelling mistakes when the autocomplete is looser => 
-*       too many false positive, not like a path where we know the answer is there
-*       => avoir plus de controle la dessus
-*       => de même pour rechercher les strings au sein des mots et pas au depart
-* - [ ] dispatch S3 methods to the right function using the first argument
-* - [ ] in string_match: create argument MatchingOptions
-* - [ ] add method void StringMatch::add(StringMatch) to add matches together, these matches
-*       may have used different options
-* - [ ] cache costly autocomlete choices (available packages/functions)
-* */
-
-/* AUTOCOMPLETE
-* 
-* - [ ] order functions
-* - [ ] cache functions
-* - [ ] ??? remove S3 functions ???
-* - [ ] cache packages in memory
-* - [ ] cache packages on disk
-* - [ ] implement string
-* - [ ] implement string interpolation
-* - [ ] implement clean_suggestions()
-* - [ ] implement update_suggestions(char c)
-* - [ ] NSE for given function arguments based on an argument's value
-* - [ ] implement var:| => leads to values from this vector. IF var is a VECTOR
-* 
-* */
-
 
 #include "rlanguageserver.hpp"
 
@@ -531,7 +482,7 @@ RLanguageServer::RLanguageServer(int argc, char **argv){
      {"prompt.main",     argtype::STRING("> ").set_hook(&concom, this, hook_set_prompt_in_R)},
      {"prompt.continue", argtype::STRING("+ ")},
      // shortcuts
-     {"shortcut.enter",     argtype::SHORTCUT("<if: line_matches: \"{_cursor_}\"> <newline> <newline> <delete: line_before> <move_y: up> <move_x: rightmost> <endif>")},
+     {"shortcut.enter",     argtype::SHORTCUT("<if: line_matches: \"{_cursor_}\"> <newline> <newline> <delete: all_left> <move_y: up> <move_x: rightmost> <endif>")},
      {"shortcut.alt+enter", argtype::SHORTCUT("<if: empty> <move_y: up> <endif> <move_y: bottom> <move_x: rightmost> <insert: \" |>\"> <newline>")},
   };
   

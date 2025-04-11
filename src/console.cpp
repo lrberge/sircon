@@ -1437,7 +1437,7 @@ void ConsoleCommand::clear_display_below(){
   std::cout << VTS::delete_lines(all_lines.size() - cursor_str_y);
 }
 
-void ConsoleCommand::delete_line_before() {
+void ConsoleCommand::delete_all_left() {
   quit_autocomp();
   last_action = CON_ACTIONS::DEL;
   selection.remove_selection();
@@ -1449,7 +1449,7 @@ void ConsoleCommand::delete_line_before() {
   
 }
 
-void ConsoleCommand::delete_line_after() {
+void ConsoleCommand::delete_all_right() {
   quit_autocomp();
   last_action = CON_ACTIONS::DEL;
   selection.remove_selection();
