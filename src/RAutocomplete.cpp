@@ -304,6 +304,7 @@ AC_String RAutocomplete::suggest_introspection(){
   ParsedVariable &raw_data = parsed_context.contextual_object;
   const string &data = raw_data.get_data_name();
   
+  bool is_char = false;
   vector<string> all_values;
   if(!raw_data.is_valid()){
     // we check for DT
@@ -337,7 +338,9 @@ AC_String RAutocomplete::suggest_introspection(){
         bool var_exists = R::R_run(str::dquote(var_name) + " %in% names(" + base + ")");
         
         if(var_exists){
-          all_values = R::R_run("as.character(" + base + "[[" + str::dquote(var_name) + "]])");
+          const string varname = base + "[[" + str::dquote(var_name) + "]]";
+          all_values = R::R_run("as.character(" + varname + ")");
+          is_char = R::R_run("is.character(" + varname + ") || is.factor(" + varname + ")");
         }
         
       }
@@ -352,6 +355,7 @@ AC_String RAutocomplete::suggest_introspection(){
   } else {
     // this can be costly depending on the context
     all_values = R::R_run("as.character(" + data + ")");
+    is_char = R::R_run("is.character(" + data + ") || is.factor(" + data + ")");
     
   }
   
@@ -370,6 +374,7 @@ AC_String RAutocomplete::suggest_introspection(){
   
   choices = std::move(values_unik);
   choices.set_meta("labels", std::move(labels));
+  choices.set_meta("is_char", is_char ? "true" : "false");
   
   choices.set_finalize(AC_FINALIZE::INTROSPECTION);
   return choices;
@@ -1116,7 +1121,7 @@ AutocompleteResult RAutocomplete::finalize_autocomplete(const str::MetaString &u
     return AutocompleteResult(user_choice);
   }
   
-  const string text = user_choice.get_string();
+  string text = user_choice.get_string();
   
   const AC_FINALIZE &finalize = user_choice.has_key("finalize") ? string_to_finalize(user_choice.get_meta("finalize")) : AC_FINALIZE::DEFAULT;
   quit_autocomp();
@@ -1143,10 +1148,15 @@ AutocompleteResult RAutocomplete::finalize_autocomplete(const str::MetaString &u
   
   if(finalize == AC_FINALIZE::INTROSPECTION){
     // we need to erase the stuff before
-    // iris:Species::TAB => "setosa"
+    // iris:Species>>TAB => "setosa"
     const size_t n_del = parsed_context.contextual_object.get_expr_wide_width() + 2;
+    bool is_char = user_choice.get_meta("is_char") == "true";
     
-    return AutocompleteResult(dquote(text)).set_n_delete_left(n_del);
+    if(is_char){
+      text = dquote(text);
+    }
+    
+    return AutocompleteResult(text).set_n_delete_left(n_del);
   }
   
   // we format the name
