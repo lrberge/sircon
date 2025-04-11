@@ -5,3 +5,5 @@
 *.pdf
 *.o
 *.txt
+
+!bin/sircon.exe

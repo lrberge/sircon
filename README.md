@@ -75,6 +75,8 @@ Start a command with `@` to navigate the history with the help of the autocomple
 
 Several histories co-exist, but live in different houses. For example, when you run `browser()` from within a function, sircon creates an history specific to this function. Hence the commands from within this function will not mess your main history for the main commands. And when you return to the function that has been `browser()`'ed, you recover its previous history.
 
+Note that commands longer than 10 lines do not appear in the history.
+
 ## Options
 
 There are multiple options. Any option can be set either: i) globally (`set_global`), ii) locally  (`set_local`), or iii) for the current session only (`set`). Global values modify entries in the config file located at `USERPROFILE/.sircon`, while local values modify entries in `working_dir/.sircon`. You can also `get` the current option value or `reset` it to factory default.
@@ -267,6 +269,17 @@ On top of the previous shortcuts, there are the cursor mobility shortcuts which,
 
 - `shift+up` / `shift+down`: goes to the top/bottom of a multilines statement, **beware: it does not select across lines!**
 - `ctrl+alt+left` / `ctrl+alt+right`: goes to the inside of the next parenthesis/bracket.
+
+## Other features
+
+There are many other features here and there, but I don't really remember them. For example: when a sequence of code is sent to the console, this sequence is stopped at the first error. 
+
+## Current bugs
+
+There are current known bugs that will be fixed:
+- problem when the command height is longer than the console height (I've introduced this bug recently ughh!)
+- when downsizing the console width, lines may disappear above
+- `.Last.value` cannot be used
 
 ## Limitations 
 
