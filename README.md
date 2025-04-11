@@ -45,6 +45,8 @@ The autocmplete provides suggestions for the following contexts:
 
 - variables from a `data.table`, when inside a `data.table`. `Ex: library(data.table)` ENTER ` dt = as.data.table(airquality)` ENTER ` dt[, .(O|)]` then TAB will suggest `"Ozone"`.
 
+- paths, when inside a character string. Ex: `list.files("|")` then TAB suggests the files in the current working directory.
+
 - names from lists/data.frames. Ex: `airquality$M` then TAB suggests `Month`. It supports chaining: `l = list(base = list(airquality))` ENTER `l$base[[1]]$M` then TAB will also suggest `Month`.
 
 - argument names, with S3 method dispatch. Ex: `x = lm(Ozone ~ Solar.R, airquality) ; summary(x, |)` then TAB will suggest the arguments `object`, `correlation` and `symbolic.cor`.
@@ -67,12 +69,89 @@ The autocmplete provides suggestions for the following contexts:
 
 ## History navigation
 
+The history is project specific. To find the location of the history, type `%path_history` (this is a special command, see the dedicated section). Just press up/down to navigate the history.
+
+Start a command with `@` to navigate the history with the help of the autocomplete. Pressing `@` then TAB gives you the list of all previous entries. Simply start typing to refine the search.
+
 ## Options
+
+There are multiple options. Any option can be set either: i) globally (`set_global`), ii) locally  (`set_local`), or iii) for the current session only (`set`). Global values modify entries in the config file located at `USERPROFILE/.sircon`, while local values modify entries in `working_dir/.sircon`. You can also `get` the current option value or `reset` it to factory default.
+
+To set the options, from within the console, you need to use the special command `%options.` then autocomplete your way to the desired option.
+
+When options are set using the console, their integrity is *always strongly checked*, ensuring bug free configurations.
+
+The available options are:
+
+- `R_path`: path to the R executable. Ex: `%options.R_path.set_local path/to/R.exe` sets the R executable to a specific version for the current project (which may be different from the global value).
+
+- `color.`: this is a family of options, it contains more than 15 subvalues to customize syntax highlighting at will. Ex: `%options.color.fun.set light_coral` sets the color of the functions to the HTML color `light_coral`. To have a diplay of all the available colors, type `%list_colors`. You can also provide colors in the `#rrggbb` format.
+
+- `ignore_comment`: whether comments should be automatically discared. By default this is true.
+
+- `ignore_empty_lines`: whether, when copy pasting code, empty lines be automatically discared. By default this is true.
+
+- `pretty_int`: if true (default), then the output of short integer vectors is automatically formatted to add commas to separate the thousands. Ex: `123456` ENTER will display `[1] 123,456`
+
+- `prompt.`: family of three subvalues: `color`, `continue` and `main`. It controls how the display of the prompt. Ex: `%options.prompt.main.set "R> "` displays `"R> "` instead of `"> "` as main prompt.
+
+- `reprex.`: family of two subvalues: `output_color` and `prompt`. When using the `%reprex_last` special command (to create reproducible examples), controls the color of the output and the prompt before each output. Ex: `%options.reprex.prompt.get` returns `"#> "`.
+
+- `shortcut.`: a family of numerous subvalues: `alt+enter`, `enter`, `ctrl+a` to `ctrl+z`. Controls the behavior of shortcuts. These are highly customizable thanks to a macro language. See the dedicated shortcut section for more information. Ex: `%options.shortcut.ctrl+a.get` displays `"<select: context>"`.
+
+- `tab_size`: for multiline commands, controls the tab size before each command after the first. Ex: `%options.tab_size.get` is 2.
 
 ## Special functions
 
-## Syntax highlighting
+Commands starting with `%` are special functions. They are not related to R but instead is a language specific to the console.
 
+Just above we have seen the special command `%options`. When these function need arguments, you can pass them as for regular command line arguments. For example, `file_list` requires a path, then you can just type `file_list ./.git/` to list all files contained in the `.git` folder. Note that the autocomplete also works for the special commands. Optional arguments are followed by a question mark.
+
+The special commands are:
+
+- `clear_history`: clears the history cache for the current project.
+
+- `copy_last_output`: sends the last output to the clipboard.
+
+- `file_copy path_orig path_dest?`: Copies the file/folder at the origin path to the destination path (default is the working directory).
+
+- `file_list path?`: lists all files from in a folder (default is the working directory).
+
+- `file_peek path`: looks into the first lines of a text file and display them dynamically on the console.
+
+- `list_colors text?`: list all available colors which can be used to customize the syntax highlighting. Add a text 
+
+- `open_folder path?`: opens the folder at the current path (default is the working directory).
+
+- `options`: to set the options, see the dedicated section.
+
+- `path_executable`: path to sircon's executable.
+
+- `path_history`: path to the history of the current project.
+
+- `path_options`: path to the global option file.
+
+- `pretty_int logical?`: whether to automatically add commas to long integers. By default, it switched the option `%options.pretty_int` between true and false.
+
+- `reprex_last int?`: prints out the last `n` (default is 1) commands along with their outputs. The autocomplete also displays the values of the commands to make it easy to pick.
+
+- `reprex_mode logical?`: if `true`, then the options `ignore_comment` and `ignore_emty_lines` are turned to false, so that code that is run from a script can be represented verbatim. By default it swithes between `true` and `false`.
+
+- `step_into_last_output`: displays the last output in a stepwise fashion (useful for very long outputs). The first 6 lines of the output are shown then you enter a special mode where: ENTER shows the next line, `digit` displays the next `digit` lines, `q` quits.
+
+- `time_all`: turns on time reporting. All commands report their execution time. Note that it includes the overheads of the console.
+
+- `time_none`: turns off time reporting (see above).
+
+- `width int`: sets the window width.
+
+
+## Shortcuts
+
+
+
+By default, sircon offers the following shortcuts:
+- ctrl+a: selects the current 
 
 
 ## Limitations 
