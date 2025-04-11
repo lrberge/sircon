@@ -5,7 +5,7 @@ This is a dependency-free, Windows-only, R console. It possesses most of the fea
 
 ## Getting started
 
-This program is a simple executable: `sircon.exe`. Either you can download it directly from this project, either you can compile it on Windows, provided you have the appropriate toolchain installed ([mysys2](https://www.msys2.org/)). 
+This program is a simple executable: `bin/sircon.exe`. Either you can download it directly from this project, either you can compile it on Windows, provided you have the appropriate toolchain installed ([mysys2](https://www.msys2.org/)). 
 
 ### Compiling on Windows
 
