@@ -129,7 +129,7 @@ inline uint string_utf8::wide_to_narrow_count_at(uint narrow_i, uint wide_n) con
   
 }
 
-inline uint string_utf8::wide_to_narrow_index(uint wide_index) const{
+uint string_utf8::wide_to_narrow_index(uint wide_index) const{
   // the index is the STARTING character
   // 
   

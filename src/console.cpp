@@ -2956,7 +2956,7 @@ string ConsoleCommand::read_line(const ReadOptions &opts){
     print_prompt();
   }
   
-  _KEY_EVENT_RECORD key_in;
+  _KEY_EVENT_RECORD key_in = {0, 1, 0, 0, 0, 0};
   
   // local sequences
   StringKeySequence key_sequence;
