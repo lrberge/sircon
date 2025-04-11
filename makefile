@@ -41,20 +41,13 @@ RAutocomplete.o: RAutocomplete.cpp RAutocomplete.hpp autocomplete.cpp autocomple
 
 sircon.o: rlanguageserver.o sircon.cpp console.hpp constants.hpp VTS.hpp stringtools.hpp clipboard.hpp pathmanip.hpp
 
-beacon.o: beacon.cpp console.hpp 
-
 %.o: %.cpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
 sircon.exe: sircon.o console.o stringtools.o clipboard.o pathmanip.o to_index.o rlanguageserver.o R.o cache.o autocomplete.o RAutocomplete.o util.o program_options.o shellrun.o specialfunctions.o history.o shortcuts.o
 	g++ $(LINKER_FLAGS) $(LARGE_STACK) $^ -o $@
 
-beacon.exe: console.o stringtools.o clipboard.o pathmanip.o beacon.o to_index.o autocomplete.o program_options.o shellrun.o specialfunctions.o history.o shortcuts.o
-	g++ $(LINKER_FLAGS) $^ -o $@
-
 # Other targets
-
-bcon: beacon.exe
 
 test_index: tests/test_to_index.exe
 tests/test_to_index.o: tests/test_to_index.cpp to_index.cpp to_index.hpp

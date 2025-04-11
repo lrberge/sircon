@@ -1,3 +1,8 @@
+    //=========================================================================//
+   //            Author: Laurent R. Bergé, University of Bordeaux             //
+  //             Copyright (C) 2025-present, Laurent R. Bergé                //
+ //              MIT License (see project_root/LICENSE)                     //
+//=========================================================================//
 
 
 #include "program_options.hpp"
