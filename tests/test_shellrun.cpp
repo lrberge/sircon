@@ -1,6 +1,6 @@
 
-#include "../util.hpp"
-#include "../shellrun.hpp"
+#include "../src/util.hpp"
+#include "../src/shellrun.hpp"
 
 
 int main(){

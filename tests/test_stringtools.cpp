@@ -1,6 +1,6 @@
 
-#include "../stringtools.hpp"
-#include "../VTS.hpp"
+#include "../src/stringtools.hpp"
+#include "../src/VTS.hpp"
 
 using namespace util;
 using namespace stringtools;

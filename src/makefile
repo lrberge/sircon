@@ -6,7 +6,7 @@ CPPFLAGS:=-Wall -Wextra -pedantic -O2
 BINPATH:=../bin/
 else 
 CPPFLAGS:=-Wall -Wextra -pedantic -g -O0
-BINPATH:=
+BINPATH:=../
 endif
 
 LARGE_STACK:=-Wl,--stack,10000000
