@@ -1517,7 +1517,7 @@ void ConsoleCommand::add_line(){
   cursors_increment_str_y();
   cursor_str_x = tab_size;
   
-  print_command(true);
+  print_command();
   
 }
 

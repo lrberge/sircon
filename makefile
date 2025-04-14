@@ -14,7 +14,7 @@ release:
 	cd ./src && $(MAKE) clean	&& $(MAKE) release=1 -j8
 
 clean:
-	cd ./src && $(MAKE) clean -j8
+	cd ./src && $(MAKE) clean
 
 # Other targets
 

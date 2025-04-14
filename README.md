@@ -277,9 +277,8 @@ There are many other features here and there, but I don't really remember them. 
 ## Current bugs
 
 There are current known bugs that will be fixed:
-- problem when the command height is longer than the console height (I've introduced this bug recently ughh!)
 - when downsizing the console width, lines may disappear above
-- `.Last.value` cannot be used
+- R's `.Last.value` cannot be used
 
 ## Limitations 
 
