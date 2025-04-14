@@ -3489,7 +3489,7 @@ CommandToEvaluate ConsoleCommand::read_command(bool is_command, string hist_name
               custom_win_width = false;
             }
             
-            bool update_width = !custom_win_width;
+            bool update_width = !custom_win_width && curs_info.win_width != win_width;
             
             if(update_width){
               
