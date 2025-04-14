@@ -215,11 +215,11 @@ void ConsoleAutocomplete::set_matches(StringMatch x, bool in_path){
       max_width -= 2;
     }
     
-    uint largest_width = 0;
+    uint value_width = 0;
     for(uint i = 0 ; i < n ; ++i){
       str::string_utf8 tmp = str::shorten(all_matches.string_at(i), max_width);
-      if(tmp.size() > largest_width){
-        largest_width = tmp.size();
+      if(tmp.size() > value_width){
+        value_width = tmp.size();
       }
       
       lines_fmt[i] = tmp.str();
@@ -230,21 +230,26 @@ void ConsoleAutocomplete::set_matches(StringMatch x, bool in_path){
     
     if(has_labels){
       uint label_size = str::max_size(all_labels);
-      if(label_size + largest_width > max_width){
+      if(label_size + value_width > max_width){
         // 3/4 sugg, 1/4 label
         uint quarter_width = 0.25 * max_width;
+        uint three_quarter_width = 0.75 * max_width;
         if(quarter_width > label_size){
           // no need to shorten the labels
-          largest_width = max_width - label_size;
-          str::shorten_inplace(lines_fmt, largest_width);
+          value_width = max_width - label_size;
+          str::shorten_inplace(lines_fmt, value_width);
+          
+        } else if(value_width < three_quarter_width){
+          // no need to shorten the values
+          str::shorten_inplace(all_labels, max_width - value_width);
           
         } else if(quarter_width <= 4){
           // we drop the labels
           has_labels = false;
           
         } else {
-          largest_width = max_width - quarter_width;
-          str::shorten_inplace(lines_fmt, largest_width);
+          value_width = max_width - quarter_width;
+          str::shorten_inplace(lines_fmt, value_width);
           str::shorten_inplace(all_labels, quarter_width);
           
         }
@@ -261,9 +266,9 @@ void ConsoleAutocomplete::set_matches(StringMatch x, bool in_path){
       
       str::string_utf8 tmp = lines_fmt[i];
       
-      if(tmp.size() < largest_width){
+      if(tmp.size() < value_width){
         const uint origin_size = tmp.size();
-        for(uint j = 0 ; j < (largest_width - origin_size) ; ++j){
+        for(uint j = 0 ; j < (value_width - origin_size) ; ++j){
           tmp.push_back(' ');
         }
       }

@@ -1,7 +1,7 @@
-    //=========================================================================//
-   //            Author: Laurent R. Bergé, University of Bordeaux             //
-  //             Copyright (C) 2025-present, Laurent R. Bergé                //
- //              MIT License (see project_root/LICENSE)                     //
+//=========================================================================//
+//            Author: Laurent R. Bergé, University of Bordeaux             //
+//            Copyright (C) 2025-present, Laurent R. Bergé                 //
+//            MIT License (see project_root/LICENSE)                       //
 //=========================================================================//
 
 
