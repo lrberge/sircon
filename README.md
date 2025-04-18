@@ -19,6 +19,8 @@ If the path to R is not found, you need to provide it manually in the config fil
 
 Then you're ready to code in R!
 
+![](images/intro.gif)
+
 ## Autocomplete
 
 ### General informations
@@ -34,6 +36,10 @@ Then you're ready to code in R!
 - Once in the autocomplete, and when it makes sense, you can constrain the scope of the suggestions using dedicated shortcuts. Press ctrl-K to display only pac**k**ages, ctrl-N for fu**n**ctions, ctrl-V for **v**ariables, ctrl-A for **a**rguments, ctrl-D for the **d**efault suggestions (I was constrained in the choice of letters due to existing VScode shortcuts that I didn't want to change -- later these will be configurable).
 
 - The autocomplete is never silent: when there is no match, it tells you why.
+
+- The autocomple works across lines.
+
+![](images/autocomp_specific_multiline.gif)
 
 ### Available autocompletions
 
@@ -67,6 +73,8 @@ The autocmplete provides suggestions for the following contexts:
 
 - use `>>` to introspect a variable and replace that variable with one of its value, as provided by the suggestion. Ex: `iris$Species>>` then TAB suggests `setosa <50>`, `versicolor <50>` and `virginica <50>`, the value in `<>` is the count and will not be inserted. Assume we accept the first suggestion, then the full string `iris$Species>>` is replaced with `"setosa"`.
 
+![](images/intro.gif)
+
 ## History navigation
 
 The history is project specific. To find the location of the history, type `%path_history` (this is a special command, see the dedicated section). Just press up/down to navigate the history.
@@ -90,6 +98,8 @@ The available options are:
 - `R_path`: path to the R executable. Ex: `%options.R_path.set_local path/to/R.exe` sets the R executable to a specific version for the current project (which may be different from the global value).
 
 - `color.`: this is a family of options, it contains more than 15 subvalues to customize syntax highlighting at will. Ex: `%options.color.fun.set light_coral` sets the color of the functions to the HTML color `light_coral`. To have a diplay of all the available colors, type `%list_colors`. You can also provide colors in the `#rrggbb` format.
+
+![](images/options_color.gif)
 
 - `ignore_comment`: whether comments should be automatically discared. By default this is true.
 
@@ -142,6 +152,8 @@ The special commands are:
 - `reprex_mode logical?`: if `true`, then the options `ignore_comment` and `ignore_emty_lines` are turned to false, so that code that is run from a script can be represented verbatim. By default it swithes between `true` and `false`.
 
 - `step_into_last_output`: displays the last output in a stepwise fashion (useful for very long outputs). The first 6 lines of the output are shown then you enter a special mode where: ENTER shows the next line, `digit` displays the next `digit` lines, `q` quits.
+
+![](images/step_into.gif)
 
 - `time_all`: turns on time reporting. All commands report their execution time. Note that it includes the overheads of the console.
 
@@ -263,6 +275,8 @@ By default, sircon implements the following shortcuts:
 
 - `alt+enter = <if: empty> <move_y: up> <endif> <move_y: bottom> <move_x: rightmost> <insert: " |>"> <newline>`: if there's something in the line, it inserts ` |>` at the end of the line and inserts a new line. If the line is empty, it first catches the previous entry in the history, goes at the bottom line (if it's a multi-lines statement), adds ` |>` to it, and finally inserts a new line.
 
+![](images/shortcut_pipe.gif)
+
 ### Shortcuts that cannot be customized
 
 On top of the previous shortcuts, there are the cursor mobility shortcuts which, so far, cannot be customized.
@@ -272,7 +286,9 @@ On top of the previous shortcuts, there are the cursor mobility shortcuts which,
 
 ## Other features
 
-There are many other features here and there, but I don't really remember them. For example: when a sequence of code is sent to the console, this sequence is stopped at the first error. 
+There are many other features here and there, but I don't really remember them. For example: when a sequence of code is sent to the console, this sequence is stopped at the first error. Also, it handles wide lines.
+
+![](images/wide_lines.gif)
 
 ## Current bugs
 
