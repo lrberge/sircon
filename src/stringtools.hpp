@@ -37,7 +37,7 @@ using std::vector;
 
 namespace stringtools {
 
-static string valid_word_char = "._";
+extern string valid_word_char;
 
 //
 // utf8 ------------------------------------------------------------------------ 

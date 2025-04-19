@@ -8,6 +8,7 @@
 
 namespace stringtools {
 
+string valid_word_char = "._";
 void set_valid_word_char(string x){
   valid_word_char = x;
 }
