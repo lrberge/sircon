@@ -18,7 +18,6 @@ namespace str = stringtools;
 using stringtools::StringMatch;
 using util::msg;
 using util::bad_type;
-  
 
 //
 // Minor utilities -------------------------------------------------------------

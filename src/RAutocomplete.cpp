@@ -11,7 +11,13 @@
 using stringtools::dquote;
 namespace str = stringtools;
 
+
+
 namespace {
+
+// static values
+string package_name = UNSET::STRING;
+const string NOT_A_PACKAGE = "__123__";
 
 inline bool is_valid_R_name(const string &x){
   if(x.empty()){
@@ -673,30 +679,98 @@ AC_String RAutocomplete::suggest_variables(bool add_ls_vars){
 
 AC_String RAutocomplete::suggest_functions(bool add_ls_functions){
   
+  util::Debug_Msg dgb("suggest_functions");
   const string &query = parsed_context.query;
+  
+  //
+  // special behavior when developping packages:
+  // 
+  
+  // we always want ALL the exports
+  
+  util::debug_msg("package_name = ", package_name);
+  
+  if(util::is_unset(package_name)){
+    
+    util::debug_msg("setting up pakcage information");
+    
+    bool is_pkg = R::R_run("\"DESCRIPTION\" %in% list.files()");
+    util::debug_msg("... is_pkg = ", is_pkg);
+    
+    string r_wd = R::R_run("getwd()");
+    util::debug_msg("... wd = ", r_wd);
+    
+    if(is_pkg){
+      R::CPP_SEXP pkg = R::R_run("trimws(gsub(\"^Package: \", \"\", readLines(\"DESCRIPTION\", n = 1)))");
+      package_name = static_cast<string>(pkg);
+      util::debug_msg("... package_name = ", package_name);
+      if(package_name.empty()){
+        package_name = NOT_A_PACKAGE;
+      }
+    } else {
+      package_name = NOT_A_PACKAGE;
+    }
+    
+  }
+  
+  AC_String pkg_funs;
+  
+  bool is_pkg = package_name != NOT_A_PACKAGE;
+  util::debug_msg("is_pkg = ", is_pkg);
+  if(is_pkg){
+    bool is_loaded = R::R_run(str::dquote(package_name) + "%in% loadedNamespaces()");
+    util::debug_msg("is_loaded = ", is_pkg);
+    if(!is_loaded){
+      is_pkg = false;
+    }
+    
+    if(is_pkg){
+      // we want ALL the functions, except the c++ wrappers
+      pkg_funs = R::R_run("grep(\"^[^_]\", ls(envir = asNamespace(" + str::dquote(package_name) + ")), value = TRUE)");
+    }
+  }
+  
+  
+  //
+  // functions from the environment 
+  //
+  
   AC_String ls_funs;
   
   if(add_ls_functions && !R::R_run("ls()").empty()){
     ls_funs = R::R_run("ls()[sapply(ls(), function(x) exists(x, mode = \"function\"))]");
   }
   
+  //
+  // functions from other packages 
+  //
+  
   AC_String funs;
+  
+  const string loaded_NS = is_pkg ? ("setdiff(loadedNamespaces(), " + str::dquote(package_name) + ")") : "loadedNamespaces()";
   
   if(!query.empty() && query[0] == '.'){
     // we only show functions starting with a dot when the query starts with a dot
     // we ignore a few internal functions
-    funs = R::R_run("grep(\"^[.]_\", sort(unlist(lapply(loadedNamespaces(), function(x) getNamespaceExports(x)))), invert = TRUE, value = TRUE)");
+    funs = R::R_run("grep(\"^[.]_\", sort(unlist(lapply(" + loaded_NS + ", function(x) getNamespaceExports(x)))), invert = TRUE, value = TRUE)");
   } else {
     // we don't show functions not starting with a letter
-    funs = R::R_run("grep(\"^[[:alpha:]]\", sort(unlist(lapply(loadedNamespaces(), function(x) getNamespaceExports(x)))), value = TRUE)");
+    funs = R::R_run("grep(\"^[[:alpha:]]\", sort(unlist(lapply(" + loaded_NS + ", function(x) getNamespaceExports(x)))), value = TRUE)");
+  }
+  
+  AC_String all_funs;
+  
+  if(!pkg_funs.empty()){
+    all_funs.push_back(pkg_funs);
   }
   
   if(!ls_funs.empty()){
-    ls_funs.push_back(funs).set_finalize(AC_FINALIZE::FUNCTION);
-    return ls_funs;
+    all_funs.push_back(ls_funs);
   }
   
-  return funs.set_finalize(AC_FINALIZE::FUNCTION);
+  all_funs.push_back(funs).set_finalize(AC_FINALIZE::FUNCTION);
+  
+  return all_funs;
 
 }
 
