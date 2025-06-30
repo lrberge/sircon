@@ -19,6 +19,8 @@ namespace {
 string package_name = UNSET::STRING;
 const string NOT_A_PACKAGE = "__123__";
 
+const vector<string> CONTROL_FUNCTIONS = {"if", "while", "for", "function"};
+
 inline bool is_valid_R_name(const string &x){
   if(x.empty()){
     return false;
@@ -547,6 +549,12 @@ AC_String RAutocomplete::suggest_argument(){
   AC_String arg_names;
   const string fun = fun_raw.get_complete_fun_name();  
   string dqfun = dquote(fun);
+  
+  // special cases
+  if(util::vector_contains(CONTROL_FUNCTIONS, fun)){
+    choices.set_cause_empty(fun + " is not a regular function");
+    return choices;
+  }
   
   //
   // Dispatching to the right S3 if appropriate
