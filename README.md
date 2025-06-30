@@ -37,6 +37,8 @@ Then you're ready to code in R!
 
 - The autocomplete is never silent: when there is no match, it tells you why.
 
+- to select the top (resp. bottom) suggestion, use `ctrl + up` (resp. `ctrl + down`).
+
 - The autocomple works across lines.
 
 ![](images/autocomp_specific_multiline.gif)
