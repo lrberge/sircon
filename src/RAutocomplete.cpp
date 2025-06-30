@@ -1043,32 +1043,6 @@ AC_String RAutocomplete::suggest_default(){
 }
 
 StringMatch RAutocomplete::make_suggestions(const AutocompleteContext &context){
-  // TODO:
-  // - dispatch S3 methods to the appropriate functions based on the first arg
-  // - data[, |] => data arguments => think well as to when this is appropriate
-  // - browser => catch ls() ex ante of coming here, directly in the cb_read_line
-  // Handle special cases:
-  // - install.packages(
-  // - library(, require(, requireNamespace(
-  // - p_load(
-  // - value == |
-  // - value %in% |
-  // - context: fixest::|
-  // - base$, object@; base[[
-  // - (later) functions with NSE fun_nse(base, |)
-  // - data sets pre-loaded
-  // - in functions with data argument, add variable AC in some arguments
-  // - add parentheses when AC functions. libra + TAB + TAB => library(|) 
-  //   NOTA: make it context dependent:
-  //         bon|x^2 => bonjour(|x^2
-  //         bon| => bonjour(|)
-  //         bon|(x^2) => bonjour(|x^2)
-  // - $ + TAB on empty data frames => message "no variable in the DF"
-  // - $ crawl (a$b$c or a[["b"]]$c or a[c("b", "c")]$c)
-  // - data(|)
-  //        airquality
-  //        base_stagg, package = "fixest"
-  //        
   
   in_autocomp = true;
   map_code_suggestion.clear();
