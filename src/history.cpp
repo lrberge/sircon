@@ -375,11 +375,17 @@ void ConsoleHistory::add_command(bool is_tmp){
   //   of all past commands (cmd_index and past_commands have the same length)
   //
   
+  util::Debug_Msg dbg("ConsoleHistory::add_command");
+  
   uint hist_size = past_commands.size();
+  util::debug_msg("hist_size = ", hist_size);
   
   // does the command exist already?
   // NOTA: we trim WS for one liners
   string full_command = pconcom->all_lines.size() > 1 ? pconcom->collect() : str::trim_WS(pconcom->collect());
+  
+  util::debug_msg("command      = ", pconcom->collect());
+  util::debug_msg("full_command = ", full_command);
   
   if(str::no_nonspace_char(full_command)){
     // we don't save empty lines
@@ -408,27 +414,54 @@ void ConsoleHistory::add_command(bool is_tmp){
     // we remove past entries and save to past commands
     
     uint64_t cmd_hash = str::hash_string(full_command);
+    
+    util::debug_msg("cmd_hash = ", cmd_hash);
+    
+    util::debug_msg("cmd_index_old:");
+    for(auto x: cmd_index){
+      util::debug_msg("- ", x.first, ": ", x.second);
+    }
+    
+    util::debug_msg("past_commands_old:");
+    for(auto x: past_commands){
+      util::debug_msg("- ", x.all_lines.at(0).str());
+    }
+    
     auto it = cmd_index.find(cmd_hash);
     if(it == cmd_index.end()){
       // does not exist
+      util::debug_msg("the command does not exist: we append");
       cmd_index[cmd_hash] = hist_size;
       ++hist_size;
     } else {
       // exist already: we clean it up
       uint i = cmd_index[cmd_hash];
+      util::debug_msg("the command exists in position ", i);
       past_commands.erase(past_commands.begin() + i);
-      cmd_index[cmd_hash] = hist_size - 1;
+      
       // we update the index of posterior values
       for(auto &x: cmd_index){
         if(x.second > i){
           x.second -= 1;
         }
       }
+      
+      // we place it here so that it does not get decreased
+      cmd_index[cmd_hash] = hist_size - 1;
     }
     
     past_commands.push_back(cmd_sum);
   }
   
+  util::debug_msg("cmd_index_new:");
+  for(auto x: cmd_index){
+    util::debug_msg("- ", x.first, ": ", x.second);
+  }
+  
+  util::debug_msg("past_commands_new:");
+  for(auto x: past_commands){
+    util::debug_msg("- ", x.all_lines.at(0).str());
+  }
   
 }
 
