@@ -679,7 +679,6 @@ AC_String RAutocomplete::suggest_variables(bool add_ls_vars){
 
 AC_String RAutocomplete::suggest_functions(bool add_ls_functions){
   
-  util::Debug_Msg dgb("suggest_functions");
   const string &query = parsed_context.query;
   
   //
@@ -688,22 +687,12 @@ AC_String RAutocomplete::suggest_functions(bool add_ls_functions){
   
   // we always want ALL the exports
   
-  util::debug_msg("package_name = ", package_name);
-  
   if(util::is_unset(package_name)){
     
-    util::debug_msg("setting up pakcage information");
-    
     bool is_pkg = R::R_run("\"DESCRIPTION\" %in% list.files()");
-    util::debug_msg("... is_pkg = ", is_pkg);
-    
-    string r_wd = R::R_run("getwd()");
-    util::debug_msg("... wd = ", r_wd);
-    
     if(is_pkg){
       R::CPP_SEXP pkg = R::R_run("trimws(gsub(\"^Package: \", \"\", readLines(\"DESCRIPTION\", n = 1)))");
       package_name = static_cast<string>(pkg);
-      util::debug_msg("... package_name = ", package_name);
       if(package_name.empty()){
         package_name = NOT_A_PACKAGE;
       }
@@ -716,10 +705,8 @@ AC_String RAutocomplete::suggest_functions(bool add_ls_functions){
   AC_String pkg_funs;
   
   bool is_pkg = package_name != NOT_A_PACKAGE;
-  util::debug_msg("is_pkg = ", is_pkg);
   if(is_pkg){
     bool is_loaded = R::R_run(str::dquote(package_name) + "%in% loadedNamespaces()");
-    util::debug_msg("is_loaded = ", is_pkg);
     if(!is_loaded){
       is_pkg = false;
     }
