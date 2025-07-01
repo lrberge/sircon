@@ -468,6 +468,8 @@ extern DEBUG_TYPE _debug;
 void write_debug(const string &x);
 
 void next_debug_type();
+inline void set_debug_to_file(){ _debug = DEBUG_TYPE::PIPE; }
+inline void set_debug_to_msg(){ _debug = DEBUG_TYPE::MSG; }
 
 template<typename... T_all>
 void msg(T_all&&... all){

@@ -87,6 +87,7 @@ public:
 // special functions 
 //
 
+void sf_debug_to_file(ConsoleCommand *pconcom, const vector<ParsedArg> &all_args);
 void sf_time_all(ConsoleCommand *pconcom);
 void sf_time_none(ConsoleCommand *pconcom);
 void sf_path_history(ConsoleCommand *pconcom);
@@ -109,6 +110,7 @@ std::shared_ptr<AutocompChoices> suggest_reprex_last(ConsoleCommand *pconcom);
 inline std::map<string, SpecialFunctionInfo> get_main_special_functions(ConsoleCommand *pconcom){
   
   const std::map<string, SpecialFunctionInfo> all_sf = {
+    {"debug_to_file", SpecialFunctionInfo(pconcom, sf_debug_to_file, {argtype::LOGICAL("true")})},
     {"time_all", SpecialFunctionInfo(pconcom, sf_time_all)},
     {"time_none", SpecialFunctionInfo(pconcom, sf_time_none)},
     {"path_history", SpecialFunctionInfo(pconcom, sf_path_history)},

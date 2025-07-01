@@ -836,6 +836,23 @@ void sf_time_none(ConsoleCommand *pconcom){
   pconcom->time_all = false;
 }
 
+void sf_debug_to_file([[maybe_unused]] ConsoleCommand *pconcom, const vector<ParsedArg> &all_args){
+  const ParsedArg arg = all_args.at(0);
+  
+  bool is_file = arg.get_logical();
+  if(arg.is_default()){
+    util::next_debug_type();
+    
+  } else if(is_file){
+    util::set_debug_to_file();
+    
+  } else {
+    util::set_debug_to_msg();
+    
+  }
+  
+}
+
 void sf_path_history(ConsoleCommand *pconcom){
   const fs::path path = pconcom->hist_list["main"]->get_history_path();
   const string path_fmt = util::format_path(path);
