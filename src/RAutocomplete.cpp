@@ -1776,7 +1776,8 @@ void AutocompleteRContext::init(const AutocompleteContext &context){
       data_container = cont_inner.get_data_name();
     }
     
-    while(!is_data_container){
+    while(!is_data_container && pos > 0){
+      
       Container new_cont(x, pos);
       if(!new_cont.is_container()){
         break;
