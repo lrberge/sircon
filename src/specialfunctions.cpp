@@ -838,15 +838,17 @@ void sf_time_none(ConsoleCommand *pconcom){
 
 void sf_path_history(ConsoleCommand *pconcom){
   const fs::path path = pconcom->hist_list["main"]->get_history_path();
-  util::msg(path.string());
-  simpleclipboard::set_clipboard(path.string());
+  const string path_fmt = util::format_path(path);
+  util::msg(path_fmt);
+  simpleclipboard::set_clipboard(path_fmt);
   util::info_msg("Info: Path copied to clipboard");
 }
 
 void sf_path_options(ConsoleCommand *pconcom){
   const fs::path path = pconcom->get_path_options();
-  util::msg(path.string());
-  simpleclipboard::set_clipboard(path.string());
+  const string path_fmt = util::format_path(path);
+  util::msg(path_fmt);
+  simpleclipboard::set_clipboard(path_fmt);
   util::info_msg("Info: Path copied to clipboard");
 }
 
@@ -856,8 +858,10 @@ void sf_path_executable([[maybe_unused]] ConsoleCommand *pconcom){
   if(status == 0){
     util::error_msg("The path of the execuable could not be found");
   } else {
-    std::cout << path << "\n";
-    simpleclipboard::set_clipboard(path);
+    const string path_fmt = util::format_path(string(path));
+    
+    std::cout << path_fmt << "\n";
+    simpleclipboard::set_clipboard(path_fmt);
     util::info_msg("Info: Path copied to clipboard");
   }
 }
