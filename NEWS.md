@@ -13,6 +13,7 @@
 - fix major bug in history collection leading to some commands to disappear
 - fix display bug of the AC inside control functions
 - fix bug preventing the setup of global shortcuts
+- option setting: paths in global options now are always absolute
 
 ### Internal 
 

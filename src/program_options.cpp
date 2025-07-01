@@ -117,7 +117,9 @@ bool is_valid_path(string &path_clean, const ArgumentFormat &fmt, string &error)
   }
   
   // we ensure the path is an absolute path
-  path_clean = fs::absolute(path).string();
+  if(fmt.should_path_be_absolute()){
+    path_clean = fs::absolute(path).string();
+  }
   
   return true;
 }
@@ -389,10 +391,15 @@ const ParsedArg& ProgramOptions::set_option(const string &key, const string &val
   // validate format
   //
   
-  const ArgumentFormat &fmt = all_options_format[key_clean];
+  ArgumentFormat &fmt = all_options_format[key_clean];
   // value_clean will be modified in is_valid_format()
   string value_clean = value;
   string fmt_error;
+  
+  if(fmt.is_path() && type == TYPE::GLOBAL){
+    // we ensure absolute paths
+    fmt.make_path_absolute();
+  }
   
   if(!is_valid_format(value_clean, fmt, fmt_error)){
     util::error_msg("When setting the option ", str::dquote(key), ". ", fmt_error);

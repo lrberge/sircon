@@ -626,11 +626,6 @@ void ConsoleCommand::special_command(const string &fun_raw){
     
     if(is_set){
       
-      if(fmt.is_path()){
-        // we need to set an absolute path
-        
-      }
-      
       program_opts.set_option(key, value, set_value);
       
       // special case: we need this

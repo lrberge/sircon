@@ -115,6 +115,11 @@ public:
   
   bool should_path_parent_exist() const { return _path_parent_exists; }
   
+  bool should_path_be_absolute() const { return _path_make_absolute; }
+  void make_path_absolute() {
+    _path_make_absolute = true;
+  }
+  
   //
   // freeform 
   //
@@ -241,6 +246,7 @@ private:
   string _path_filename;
   bool _path_exists = false;
   bool _path_parent_exists = false;
+  bool _path_make_absolute = false;
   
   bool _is_background_color = false;
   
