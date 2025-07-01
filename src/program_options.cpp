@@ -219,7 +219,7 @@ bool is_valid_option_line(const string &x, const options_fmt_t &all_opts_fmt,
   
   str::move_i_to_non_WS_if_i_WS(x, i, SIDE::RIGHT);
   
-  while(i < n && (str::is_ascii_letter(x[i]) || x[i] == '_' || x[i] == '.')){
+  while(i < n && (str::is_ascii_letter(x[i]) || x[i] == '_' || x[i] == '.' || x[i] == '+')){
     key += x[i++];
   }
   
@@ -332,10 +332,11 @@ ProgramOptions& ProgramOptions::read_options(){
             if(first_error){
               first_error = false;
               util::error_msg("Problem in line ", line_nb, " of the ", global_local, 
-                " options file located at:\n", util::format_path(path), "\n", line_error);
+                              " options file located at:\n", util::format_path(path), 
+                              "\n", line_error);
             } else {
               util::error_msg("Problem in line ", line_nb, " of the ", global_local, 
-                " options file.\n", line_error);
+                              " options file.\n", line_error);
             }
             
           } else {
