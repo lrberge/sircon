@@ -827,15 +827,6 @@ std::shared_ptr<AutocompChoices> suggest_reprex_last(ConsoleCommand *pconcom){
 // special functions ----------------------------------------------------------- 
 //
 
-
-void sf_time_all(ConsoleCommand *pconcom){
-  pconcom->time_all = true;
-}
-
-void sf_time_none(ConsoleCommand *pconcom){
-  pconcom->time_all = false;
-}
-
 void sf_debug_to_file([[maybe_unused]] ConsoleCommand *pconcom, const vector<ParsedArg> &all_args){
   const ParsedArg arg = all_args.at(0);
   
@@ -851,6 +842,14 @@ void sf_debug_to_file([[maybe_unused]] ConsoleCommand *pconcom, const vector<Par
     
   }
   
+}
+
+void sf_time_all(ConsoleCommand *pconcom){
+  pconcom->time_all = true;
+}
+
+void sf_time_none(ConsoleCommand *pconcom){
+  pconcom->time_all = false;
 }
 
 void sf_path_history(ConsoleCommand *pconcom){
