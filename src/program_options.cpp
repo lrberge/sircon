@@ -73,14 +73,15 @@ bool is_valid_color(const string &col){
   return true;
 }
 
-bool is_valid_path(const string &x, const ArgumentFormat &fmt, string &error){
-  fs::path path(x);
+bool is_valid_path(string &path_clean, const ArgumentFormat &fmt, string &error){
   
   // What is a valid path?
   // - has a root
   // - exists?
   // - has a parent?
   // - ends with?
+  
+  fs::path path(path_clean);
   
   if(fmt.should_path_exist() && !fs::exists(path)){
     error = util::txt("The path should exist but \"", path, "\" does not");
@@ -114,6 +115,9 @@ bool is_valid_path(const string &x, const ArgumentFormat &fmt, string &error){
       return false;
     }
   }
+  
+  // we ensure the path is an absolute path
+  path_clean = fs::absolute(path).string();
   
   return true;
 }
