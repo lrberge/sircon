@@ -215,7 +215,7 @@ uint string_utf8::word_jump(uint wide_i, int side) const {
   return wide_pos;
 }
 
-uint string_utf8::word_delete(uint wide_i, int side) const {
+uint string_utf8::word_delete(uint wide_i, int side, const bool stop_at_slash) const {
   
   if(wide_line_size == 0){
     return 0;
@@ -225,13 +225,13 @@ uint string_utf8::word_delete(uint wide_i, int side) const {
   if(is_wide){
     // NOTE: wide_i goes from 0 to n with n the wide_line_size
     uint narrow_i = wide_to_narrow_index(wide_i);
-    uint new_narrow_pos = stringtools::word_delete(line, narrow_i, side);
+    uint new_narrow_pos = stringtools::word_delete(line, narrow_i, side, stop_at_slash);
     // we convert narrow_pos into wide_res
     
     wide_pos = narrow_to_wide_index(new_narrow_pos);
     
   } else {
-    wide_pos = stringtools::word_delete(line, wide_i, side);
+    wide_pos = stringtools::word_delete(line, wide_i, side, stop_at_slash);
   }
   
   return wide_pos;

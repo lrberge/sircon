@@ -645,7 +645,8 @@ inline uint word_jump_default(const string &line, const uint index, const int si
   return res;
 }
 
-inline uint word_delete(const string &line, const uint index, const int side){
+inline uint word_delete(const string &line, const uint index, const int side,
+                        const bool stop_at_slash = false){
   
   /* DESIRED BEHAVIOR, SIDE = RIGHT
   * 
@@ -693,7 +694,16 @@ inline uint word_delete(const string &line, const uint index, const int side){
     
     if(is_control_char(line[i])){
       ++i;
-      while(i < n && is_nonspace_control(line[i])){
+      
+      if(stop_at_slash && line[i - 1] == '/'){
+        
+        while(i < n && line[i] == '/'){
+          ++i;
+        }
+        
+      }
+      
+      while(i < n && is_nonspace_control(line[i]) && !(stop_at_slash && line[i] == '/')){
         ++i;
       }
       
@@ -730,8 +740,18 @@ inline uint word_delete(const string &line, const uint index, const int side){
     }
     
     if(is_control_char(line[i])){
+      
       --i;
-      while(i >= 0 && is_nonspace_control(line[i])){
+      
+      if(stop_at_slash && line[i + 1] == '/'){
+        
+        while(i >= 0 && line[i] == '/'){
+          --i;
+        }
+        
+      }
+      
+      while(i >= 0 && is_nonspace_control(line[i]) && !(stop_at_slash && line[i] == '/')){
         --i;
       }
       
@@ -1764,7 +1784,7 @@ public:
   vector<string_utf8> split(uint) const;
   
   uint word_jump(uint index_wide, int side) const;
-  uint word_delete(uint index_wide, int side) const;
+  uint word_delete(uint index_wide, int side, const bool stop_at_slash = false) const;
   
   uint word_jump_default(uint index_wide, int side) const{
     const string valid_bak = valid_word_char;
@@ -1777,8 +1797,9 @@ public:
   uint word_delete_default(uint index_wide, int side) const {
     const string valid_bak = valid_word_char;
     valid_word_char = "_";
-    uint res = word_delete(index_wide, side);
+    uint res = word_delete(index_wide, side, true);
     valid_word_char = valid_bak;
+    
     return res;
   }
   
