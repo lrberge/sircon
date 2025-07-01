@@ -1,7 +1,7 @@
 program: sircon
 authors: Laurent R. Berge (laurent.berge@u-bordeaux.fr)
 title: Simple R Console
-version: 0.0.1
+version: 0.2.0
 licence: MIT (see LICENCE)
 description: No dependency, Windows-only, R console written in C++.
 
