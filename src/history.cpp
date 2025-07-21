@@ -135,7 +135,7 @@ ConsoleHistory::ConsoleHistory(ConsoleCommand *pcon, const string program_name){
   // note that the first values of the vector past_commands are in
   // fact the oldest ones => we respect that here (we start from the end)
   // 
-  const uint MAX_HIST_ENTRIES = 80;
+  const uint MAX_HIST_ENTRIES = 800;
   IndexInfo index = to_index(all_hash, to_indexOpts().reverse());
   
   const vector<size_t> first_obs = index.get_first_obs();
@@ -165,7 +165,7 @@ void ConsoleHistory::write_history(){
   
   std::ofstream hist_file_out(hist_path);
   if(!hist_file_out.is_open()){
-    std::cerr << "Could not wite into the existing history located at:\n'" << hist_path << "'\n";
+    std::cerr << "Could not write into the existing history located at:\n'" << hist_path << "'\n";
     return;
   }
   
