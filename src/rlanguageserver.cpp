@@ -495,7 +495,7 @@ RLanguageServer::RLanguageServer(int argc, char **argv){
   
   concom.setup_lgsrv(this);
   concom.setup_Run_While_Reading(&input_hook);
-  concom.setup_language_keywords({"TRUE", "FALSE"});
+  concom.setup_language_keywords({"TRUE", "FALSE", "NULL"});
   concom.setup_language_controls({"if", "else", "while", "for", "next", "continue", "in"});
   concom.setup_ignored_hist_cmd({"q()"});
   concom.setup_special_functions(all_special_funs);
