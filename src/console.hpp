@@ -588,6 +588,8 @@ private:
     {"shortcut.ctrl+x", argtype::SHORTCUT("<cut>")},
     {"shortcut.ctrl+y", argtype::SHORTCUT("<redo>")},
     {"shortcut.ctrl+z", argtype::SHORTCUT("<undo>")},
+    // auto-trimming in sequences
+    {"trim_comment", argtype::STRING("")},
   };
   
   const string opt_color(const string &x) const {

@@ -484,6 +484,7 @@ RLanguageServer::RLanguageServer(int argc, char **argv){
      // shortcuts
      {"shortcut.enter",     argtype::SHORTCUT("<if: line_matches: \"{_cursor_}\"> <newline> <newline> <delete: all_left> <move_y: up> <move_x: rightmost> <endif>")},
      {"shortcut.alt+enter", argtype::SHORTCUT("<if: empty> <move_y: up> <endif> <move_y: bottom> <move_x: rightmost> <insert: \" |>\"> <newline>")},
+     {"trim_comment", argtype::STRING("#' ")},
   };
   
   // special functions

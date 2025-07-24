@@ -7,6 +7,7 @@
 - AC: suggest non exported functions of the current package when the working directory is found to be a package
 - special functions %path_(executable|history|options): improve path format
 - improved ctrl+(backspace|delete) within paths
+- allow to run roxygen comments
 
 ### Bug fixes
 

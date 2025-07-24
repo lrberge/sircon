@@ -3625,9 +3625,18 @@ CommandToEvaluate ConsoleCommand::read_command(bool is_command, string hist_name
       // }
       
       // we discard the empty lines
+      const string &trim_front = program_opts.get_option("trim_comment").get_string();
+      const bool is_trim = !trim_front.empty();
+      
       if(command_front){
+        
         while(!sequence.empty()){
-          const string &str = sequence.front();
+          string &str = sequence.front();
+          
+          if(is_trim && str::starts_with(str, trim_front)){
+            str.erase(str.begin(), str.begin() + trim_front.size()); 
+          }
+          
           if(str::no_nonspace_char(str) && 
              program_opts.get_option("ignore_empty_lines").get_logical()){
             
@@ -3651,6 +3660,11 @@ CommandToEvaluate ConsoleCommand::read_command(bool is_command, string hist_name
       in_sequence = true;
       while(!sequence.empty()){
         string str = sequence.pop_front();
+        
+        if(is_trim && str::starts_with(str, trim_front)){
+          str.erase(str.begin(), str.begin() + trim_front.size());
+        }
+        
         add_char(str, true);
         if(sequence.is_enter()){
           // cout << "ENTER -- size = " << sequence.size();
