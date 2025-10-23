@@ -298,11 +298,13 @@ There are current known bugs that will be fixed:
 - when downsizing the console width, lines may disappear above
 - R's `.Last.value` cannot be used
 
-## Limitations 
+## Limitations
 
 The two major limitation are:
 - Windows only (it is built using the Windows C API)
 - does not support wide characters (i.e. CJK)
+
+*Funding development.* If you are a company and are interested in funding the development of: i) the extension to Linux and Mac, ii) the support for wide characters, iii) the extension to python; please [contact me](mailto:laurent.berge@u-bordeaux.fr).
 
 ## Acknowledgements
 
